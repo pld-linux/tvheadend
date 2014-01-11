@@ -1,26 +1,15 @@
-# TODO:
-# - verify BR
-#
-%define		maj_version 3.4
-%define		tar_subversion patch1
-%define		min_version 27
-######		Unknown group!
 Summary:	TV streaming server
 Name:		tvheadend
-Version:	%{maj_version}.%{min_version}
-Release:	0.2
+Version:	3.9
+Release:	0.1
 License:	GPL v3
 Group:		Video/Television
 URL:		https://tvheadend.org/projects/tvheadend
-Source0:	https://github.com/tvheadend/tvheadend/archive/%{maj_version}%{tar_subversion}.tar.gz
-# Source0-md5:	86d1be0ad6e02bd2aecd3d529a026797
+Source0:	https://github.com/tvheadend/tvheadend/archive/v3.9.tar.gz
+# Source0-md5:	177f5ecf771a1877d38a00bf18806f15
 Source1:	%{name}.conf
 Source2:	%{name}.service
 Source3:	%{name}.sysconfig
-#BuildRequires:	avahi-client-devel
-#BuildRequires:	kdelibs4-devel
-#BuildRequires:	libgcrypt-devel
-#BuildRequires:	qt4-build
 BuildRequires:	rpmbuild(macros) >= 1.647
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	systemd-units >= 0.38
@@ -34,16 +23,20 @@ Tvheadend is a TV streaming server for Linux supporting DVB-S, DVB-S2,
 DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 
 %prep
-%setup -q -n %{name}-%{maj_version}%{tar_subversion}
+%setup -q -n %{name}-%{version}
 
 %build
-#temporary workaround until upstream fixes compilation with gcc-4.6
-#export CFLAGS="%{rpmcflags} -Wno-error=unused-but-set-variable"
 export CFLAGS="%{rpmcflags}"
 export CC="%{__cc}"
 #tvheadend uses a custom configure script, so %%configure cannot be used
 # as not all options are supported
-./configure --prefix=%{_prefix} --release --libdir=%{_libdir} --mandir=%{_mandir}/man1 --disable-dvbscan
+./configure \
+	--prefix=%{_prefix} \
+	--release \
+	--libdir=%{_libdir} \
+	--mandir=%{_mandir}/man1 \
+	--disable-dvbscan
+
 %{__make} V=1
 
 %install
