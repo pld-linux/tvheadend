@@ -56,18 +56,6 @@ stop() {
 	rm -f /var/lock/subsys/tvheadend
 }
 
-reload() {
-	if [ ! -f /var/lock/subsys/tvheadend ]; then
-		msg_not_running "tvheadend"
-		RETVAL=7
-		return
-	fi
-
-	msg_reloading "tvheadend"
-	killproc tvheadend -HUP
-	RETVAL=$?
-}
-
 condrestart() {
 	if [ ! -f /var/lock/subsys/tvheadend ]; then
 		msg_not_running "tvheadend"
@@ -95,12 +83,6 @@ case "$1" in
   try-restart)
 	condrestart 0
 	;;
-# include force-reload here if program allows reloading without restart
-# otherwise remove reload action and support force-reload as restart if running
-  reload|force-reload)
-	reload
-	;;
-# use this one if program doesn't support reloading without restart
   force-reload)
 	condrestart 7
 	;;
@@ -109,7 +91,7 @@ case "$1" in
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
