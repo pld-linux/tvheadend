@@ -31,43 +31,6 @@ TVHEADEND_ARGS=""
 # Get service config - may override defaults
 [ -f /etc/sysconfig/tvheadend ] && . /etc/sysconfig/tvheadend
 
-# configtest itself
-# must return non-zero if check failed
-# output is discarded if checkconfig is ran without details
-configtest() {
-	/usr/sbin/tvheadend -t
-	return $?
-}
-
-# wrapper for configtest
-checkconfig() {
-	local details=${1:-0}
-
-	if [ $details = 1 ]; then
-		# run config test and display report (status action)
-		show "Checking %s configuration" "tvheadend"; busy
-		local out
-		out=$(configtest 2>&1)
-		RETVAL=$?
-		if [ $RETVAL = 0 ]; then
-			ok
-		else
-			fail
-		fi
-		[ "$out" ] && echo >&2 "$out"
-	else
-		# run config test and abort with nice message if failed
-		# (for actions checking status before action).
-		configtest >/dev/null 2>&1
-		RETVAL=$?
-		if [ $RETVAL != 0 ]; then
-			show "Checking %s configuration" "tvheadend"; fail
-			nls 'Configuration test failed. See details with %s "checkconfig"' $0
-			exit $RETVAL
-		fi
-	fi
-}
-
 start() {
 	# Check if the service is already running?
 	if [ -f /var/lock/subsys/tvheadend ]; then
@@ -75,9 +38,8 @@ start() {
 		return
 	fi
 
-	checkconfig
 	msg_starting "tvheadend"
-	daemon --group video /usr/sbin/tvheadend $TVHEADEND_ARGS
+	daemon /usr/bin/tvheadend -f -u tvheadend -g video $TVHEADEND_ARGS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tvheadend
 }
@@ -101,7 +63,6 @@ reload() {
 		return
 	fi
 
-	checkconfig
 	msg_reloading "tvheadend"
 	killproc tvheadend -HUP
 	RETVAL=$?
@@ -114,7 +75,6 @@ condrestart() {
 		return
 	fi
 
-	checkconfig
 	stop
 	start
 }
@@ -129,7 +89,6 @@ case "$1" in
 	stop
 	;;
   restart)
-	checkconfig
 	stop
 	start
 	;;
@@ -145,15 +104,12 @@ case "$1" in
   force-reload)
 	condrestart 7
 	;;
-  checkconfig|configtest)
-	checkconfig 1
-	;;
   status)
 	status tvheadend
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|checkconfig|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
