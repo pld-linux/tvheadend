@@ -77,7 +77,7 @@ start() {
 
 	checkconfig
 	msg_starting "tvheadend"
-	daemon --group video /usr/sbin/tvheadend
+	daemon --group video /usr/sbin/tvheadend $TVHEADEND_ARGS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tvheadend
 }
