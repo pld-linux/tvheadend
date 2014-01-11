@@ -1,11 +1,9 @@
-# TODO
-# - register uid
 Summary:	TV streaming server
 Name:		tvheadend
 # keep stable version announced on web page
 %define vername 3.4patch1
 Version:	3.4.27
-Release:	1
+Release:	2
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{vername}.tar.gz
@@ -49,7 +47,8 @@ export CC="%{__cc}"
 	--release \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
-	--mandir=%{_mandir}/man1
+	--mandir=%{_mandir}/man1 \
+	--disable-dvbscan
 
 %{__make} V=1
 
@@ -74,7 +73,6 @@ chmod +x $RPM_BUILD_ROOT%{_bindir}/%{name}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-# FIXME: use registered uid!
 %useradd -u 20 -d %{_localstatedir}/lib/%{name} -g video -G usb -c "tvheadend User" tvheadend
 
 %post
