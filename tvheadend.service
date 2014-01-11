@@ -1,0 +1,15 @@
+[Unit]
+Description=tvheadend
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/sysconfig/tvheadend
+User=tvheadend
+Group=video
+ExecStart=/usr/bin/tvheadend $TVHEADEND_ARGS
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
