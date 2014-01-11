@@ -1,4 +1,6 @@
 # TODO
+# - register uid
+# - initscript: two 'force-reload' (either it has reload or not, cleanup!)
 Summary:	TV streaming server
 Name:		tvheadend
 # keep stable version announced on web page
