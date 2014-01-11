@@ -1,12 +1,14 @@
 Summary:	TV streaming server
 Name:		tvheadend
-Version:	3.9
+# keep stable version announced on web page
+Version:	3.4.27
 Release:	0.1
 License:	GPL v3
 Group:		Applications/Multimedia
 URL:		https://tvheadend.org/projects/tvheadend
-Source0:	https://github.com/tvheadend/tvheadend/archive/v%{version}.tar.gz
-# Source0-md5:	177f5ecf771a1877d38a00bf18806f15
+%define vername 3.4patch1
+Source0:	https://github.com/tvheadend/tvheadend/archive/%{vername}.tar.gz
+# Source0-md5:	86d1be0ad6e02bd2aecd3d529a026797
 Source1:	%{name}.conf
 Source2:	%{name}.service
 Source3:	%{name}.sysconfig
@@ -30,7 +32,7 @@ Tvheadend is a TV streaming server for Linux supporting DVB-S, DVB-S2,
 DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{vername}
 
 %build
 export CFLAGS="%{rpmcflags}"
@@ -42,8 +44,7 @@ export CC="%{__cc}"
 	--prefix=%{_prefix} \
 	--release \
 	--libdir=%{_libdir} \
-	--mandir=%{_mandir}/man1 \
-	--disable-dvbscan
+	--mandir=%{_mandir}/man1
 
 %{__make} V=1
 
