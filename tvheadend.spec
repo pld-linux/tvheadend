@@ -66,7 +66,7 @@ cp %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 chmod +x $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %pre
-%useradd -u 20 -d %{_localstatedir}/lib/%{name} -g video -c "tvheadend User" %{name}
+%useradd -u 20 -d %{_localstatedir}/lib/%{name} -g video -G usb -c "tvheadend User" %{name}
 
 %post
 /sbin/chkconfig --add tvheadend
