@@ -3,7 +3,7 @@ Name:		tvheadend
 # keep stable version announced on web page
 %define vername 3.4patch1
 Version:	3.4.27
-Release:	2
+Release:	3
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{vername}.tar.gz
