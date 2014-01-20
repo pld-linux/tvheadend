@@ -3,7 +3,7 @@ Name:		tvheadend
 # keep stable version announced on web page
 %define vername 3.4patch1
 Version:	3.4.27
-Release:	3
+Release:	4
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{vername}.tar.gz
@@ -25,7 +25,7 @@ Requires(post,preun,postun):	systemd-units >= 38
 Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
-Requires:	group(video)
+Requires:	setup
 Requires:	systemd-units >= 0.38
 Provides:	user(tvheadend)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
