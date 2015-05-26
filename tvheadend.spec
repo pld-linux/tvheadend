@@ -14,8 +14,10 @@ Source4:	%{name}.init
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	curl-devel
+BuildRequires:	ffmpeg-devel
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.647
+BuildRequires:	uriparser-devel
 BuildRequires:	zlib-devel
 Requires(post):	pwgen
 Requires(post):	sed >= 4.0
