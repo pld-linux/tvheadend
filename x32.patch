@@ -1,0 +1,33 @@
+--- tvheadend-4.0.2/src/tvheadend.h~	2015-05-25 15:44:34.000000000 +0000
++++ tvheadend-4.0.2/src/tvheadend.h	2015-07-16 20:06:46.787257990 +0000
+@@ -789,6 +789,8 @@
+ 
+ #if __WORDSIZE == 32 && defined(PLATFORM_FREEBSD)
+ #define PRItime_t       "d"
++#elif defined(__ILP32__)
++#define PRItime_t       "lld"
+ #else
+ #define PRItime_t       "ld"
+ #endif
+--- tvheadend-4.0.2/src/descrambler/descrambler.c~	2015-05-25 15:44:34.000000000 +0000
++++ tvheadend-4.0.2/src/descrambler/descrambler.c	2015-07-16 20:09:10.140620617 +0000
+@@ -477,7 +477,7 @@
+                                 (ki & 0x40) ? "odd" : "even",
+                                 ((mpegts_service_t *)t)->s_dvb_svcname);
+         if (key_late(dr, ki)) {
+-          tvherror("descrambler", "ECM late (%ld seconds) for service \"%s\"",
++          tvherror("descrambler", "ECM late (%"PRItime_t" seconds) for service \"%s\"",
+                                   dispatch_clock - dr->dr_ecm_key_time,
+                                   ((mpegts_service_t *)t)->s_dvb_svcname);
+           if (ecm_reset(t, dr)) {
+--- tvheadend-4.0.2/src/epggrab/otamux.c~	2015-05-25 15:44:34.000000000 +0000
++++ tvheadend-4.0.2/src/epggrab/otamux.c	2015-07-16 20:10:34.961370520 +0000
+@@ -592,7 +592,7 @@
+ static void
+ epggrab_ota_next_arm( time_t next )
+ {
+-  tvhtrace("epggrab", "next ota start event in %li seconds", next - time(NULL));
++  tvhtrace("epggrab", "next ota start event in %"PRItime_t" seconds", next - time(NULL));
+   gtimer_arm_abs(&epggrab_ota_start_timer, epggrab_ota_start_cb, NULL, next);
+   dbus_emit_signal_s64("/epggrab/ota", "next", next);
+ }

@@ -11,6 +11,7 @@ Source1:	%{name}.conf
 Source2:	%{name}.service
 Source3:	%{name}.sysconfig
 Source4:	%{name}.init
+Patch0:		x32.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	curl-devel
@@ -37,6 +38,7 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 export CFLAGS="%{rpmcflags}"
