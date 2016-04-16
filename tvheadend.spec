@@ -13,6 +13,7 @@ Source3:	%{name}.sysconfig
 Source4:	%{name}.init
 Patch0:		x32.patch
 Patch1:		ffmpeg3.patch
+Patch2:		64bit.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	curl-devel
@@ -41,6 +42,9 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%ifarch %{x8664}
+%patch2 -p1
+%endif
 
 %build
 export CFLAGS="%{rpmcflags}"
