@@ -14,6 +14,7 @@ Source4:	%{name}.init
 Patch0:		x32.patch
 Patch1:		ffmpeg3.patch
 Patch2:		64bit.patch
+Patch3:		32bit.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	curl-devel
@@ -44,6 +45,9 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %patch1 -p1
 %ifarch %{x8664}
 %patch2 -p1
+%endif
+%ifarch %{ix86} x32
+%patch3 -p1
 %endif
 
 %build
