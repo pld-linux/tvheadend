@@ -1,17 +1,18 @@
 Summary:	TV streaming server
 Name:		tvheadend
 # https://tvheadend.org/projects/tvheadend/wiki/Releases
-Version:	4.0.2
+Version:	4.0.8
 Release:	1
 License:	GPL v3
 Group:		Applications/Multimedia
-Source0:	https://github.com/tvheadend/tvheadend/archive/v%{version}.tar.gz
-# Source0-md5:	e17596adbfde2a9893460264037278e4
+Source0:	https://github.com/tvheadend/tvheadend/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	dbb33a9b27a68749961f6aae700d9848
 Source1:	%{name}.conf
 Source2:	%{name}.service
 Source3:	%{name}.sysconfig
 Source4:	%{name}.init
 Patch0:		x32.patch
+Patch1:		ffmpeg3.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	curl-devel
@@ -39,6 +40,7 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 export CFLAGS="%{rpmcflags}"
