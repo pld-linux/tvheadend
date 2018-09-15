@@ -2,7 +2,7 @@ Summary:	TV streaming server
 Name:		tvheadend
 # https://tvheadend.org/projects/tvheadend/wiki/Releases
 Version:	4.0.8
-Release:	2
+Release:	3
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/v%{version}/%{name}-%{version}.tar.gz
