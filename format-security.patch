@@ -1,0 +1,89 @@
+From 8bd059550c641fcaae3a360c527ada6ec74ce9e7 Mon Sep 17 00:00:00 2001
+From: Flole998 <Flole998@users.noreply.github.com>
+Date: Mon, 8 Jun 2020 21:43:18 +0200
+Subject: [PATCH] Allocate space for buf on heap (modified PR #1324)
+
+---
+ src/epggrab/module/xmltv.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/epggrab/module/xmltv.c b/src/epggrab/module/xmltv.c
+index 34ab05bdb7..d48bdbbb1e 100644
+--- a/src/epggrab/module/xmltv.c
++++ b/src/epggrab/module/xmltv.c
+@@ -197,11 +197,12 @@ static void parse_xmltv_dd_progid
+   (epggrab_module_t *mod, const char *s, char **uri, char **suri,
+    epg_episode_num_t *epnum)
+ {
+-  char buf[128];
+   if (strlen(s) < 2) return;
+   
++  const int buf_size = s_len + strlen(mod->id) + 13;
++  char * buf = (char *) malloc( buf_size);
+   /* Raw URI */
+-  snprintf(buf, sizeof(buf)-1, "ddprogid://%s/%s", mod->id, s);
++  int e = snprintf( buf, buf_size, "ddprogid://%s/%s", mod->id, s);
+ 
+   /* SH - series without episode id so ignore */
+   if (strncmp("SH", s, 2))
+@@ -212,7 +213,7 @@ static void parse_xmltv_dd_progid
+   /* Episode */
+   if (!strncmp("EP", s, 2)) {
+     int e = strlen(buf)-1;
+-    while (e && buf[e] != '.') e--;
++    while (--e && buf[e] != '.') {}
+     if (e) {
+       buf[e] = '\0';
+       *suri = strdup(buf);
+From e1031ce5d55275e1606643133b8168adcbe5f231 Mon Sep 17 00:00:00 2001
+From: Flole998 <Flole998@users.noreply.github.com>
+Date: Mon, 8 Jun 2020 21:46:22 +0200
+Subject: [PATCH] Allocate space for buf on heap (modified PR #1324)
+
+---
+ src/epggrab/module/xmltv.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/epggrab/module/xmltv.c b/src/epggrab/module/xmltv.c
+index d48bdbbb1e..fa36640f7e 100644
+--- a/src/epggrab/module/xmltv.c
++++ b/src/epggrab/module/xmltv.c
+@@ -197,7 +197,8 @@ static void parse_xmltv_dd_progid
+   (epggrab_module_t *mod, const char *s, char **uri, char **suri,
+    epg_episode_num_t *epnum)
+ {
+-  if (strlen(s) < 2) return;
++  const int s_len = strlen(s);
++  if (s_len < 2) return;
+   
+   const int buf_size = s_len + strlen(mod->id) + 13;
+   char * buf = (char *) malloc( buf_size);
+@@ -212,7 +213,6 @@ static void parse_xmltv_dd_progid
+ 
+   /* Episode */
+   if (!strncmp("EP", s, 2)) {
+-    int e = strlen(buf)-1;
+     while (--e && buf[e] != '.') {}
+     if (e) {
+       buf[e] = '\0';
+From 51a4c5bec7b6fc69dab7b8d559f9b1b881f0eb8e Mon Sep 17 00:00:00 2001
+From: Flole998 <Flole998@users.noreply.github.com>
+Date: Wed, 10 Jun 2020 23:27:21 +0200
+Subject: [PATCH] Fix memory leak
+
+---
+ src/epggrab/module/xmltv.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/epggrab/module/xmltv.c b/src/epggrab/module/xmltv.c
+index fa36640f7e..6f09f3e18a 100644
+--- a/src/epggrab/module/xmltv.c
++++ b/src/epggrab/module/xmltv.c
+@@ -220,6 +220,7 @@ static void parse_xmltv_dd_progid
+       if (buf[e+1]) sscanf(&buf[e+1], "%hu", &(epnum->e_num));
+     }
+   }
++  free(buf);
+ }
+ 
+ /**
