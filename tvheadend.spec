@@ -2,22 +2,22 @@
 # Conditional build:
 %bcond_without	systemd		# without systemd support
 
+%define		gitref	637844055c186e981495da711e4887806f656c98
+%define		snap	20210531
+
 Summary:	TV streaming server
 Name:		tvheadend
 # https://tvheadend.org/projects/tvheadend/wiki/Releases
-Version:	4.2.8
-Release:	1
+Version:	4.3.0
+Release:	0.%{snap}.1
 License:	GPL v3
 Group:		Applications/Multimedia
-Source0:	https://github.com/tvheadend/tvheadend/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b9571efa46dd489f9fe87acdb391d591
+Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap}.tar.gz
+# Source0-md5:	9d5f4e06a458ea221e9c218837e817fa
 Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
-Patch0:		format-security.patch
-Patch1:		strncpy.patch
-Patch2:		gcc10.patch
-Patch3:		x32.patch
+Patch0:		x32.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	dbus-devel
@@ -25,6 +25,7 @@ BuildRequires:	ffmpeg-devel >= 3.0
 BuildRequires:	gettext-tools
 BuildRequires:	libdvbcsa-devel
 BuildRequires:	openssl-devel
+BuildRequires:	pcre2-8-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python3-modules
 BuildRequires:	rpmbuild(macros) >= 1.647
@@ -47,13 +48,12 @@ Tvheadend is a TV streaming server for Linux supporting DVB-S, DVB-S2,
 DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q -n %{name}-%{gitref}
 %ifarch x32
-%patch3 -p1
+%patch0 -p1
 %endif
+
+%{__sed} -i -e '1s,/usr/bin/env python$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
 
 %build
 export CFLAGS="%{rpmcflags}"
@@ -71,13 +71,6 @@ export LDFLAGS="%{rpmldflags}"
 	--disable-dvbscan \
 	--disable-ffmpeg_static \
 	--disable-hdhomerun_static \
-	--disable-libfdkaac_static \
-	--disable-libmfx_static \
-	--disable-libtheora_static \
-	--disable-libvorbis_static \
-	--disable-libvpx_static \
-	--disable-libx264_static \
-	--disable-libx265_static \
 	%{!?with_systemd:--disable-libsystemd_daemon}
 
 %{__make} V=1
