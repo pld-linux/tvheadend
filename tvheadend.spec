@@ -4,12 +4,13 @@
 
 %define		gitref	637844055c186e981495da711e4887806f656c98
 %define		snap	20210531
+%define		rel	2
 
 Summary:	TV streaming server
 Name:		tvheadend
 # https://tvheadend.org/projects/tvheadend/wiki/Releases
 Version:	4.3.0
-Release:	0.%{snap}.1
+Release:	0.%{snap}.%{rel}
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap}.tar.gz
