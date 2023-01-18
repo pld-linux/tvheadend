@@ -2,9 +2,9 @@
 # Conditional build:
 %bcond_without	systemd		# without systemd support
 
-%define		gitref	637844055c186e981495da711e4887806f656c98
-%define		snap	20210531
-%define		rel	2
+%define		gitref	760f32bf531e15346a40cef864f87edd5bae9681
+%define		snap	20230117
+%define		rel	1
 
 Summary:	TV streaming server
 Name:		tvheadend
@@ -14,7 +14,7 @@ Release:	0.%{snap}.%{rel}
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	9d5f4e06a458ea221e9c218837e817fa
+# Source0-md5:	7b699538f30f6b3ee15b31a43e96d116
 Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
@@ -25,6 +25,8 @@ BuildRequires:	dbus-devel
 BuildRequires:	ffmpeg-devel >= 3.0
 BuildRequires:	gettext-tools
 BuildRequires:	libdvbcsa-devel
+BuildRequires:	libx264-devel
+BuildRequires:	libx265-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre2-8-devel
 BuildRequires:	pkgconfig
@@ -54,7 +56,7 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %patch0 -p1
 %endif
 
-%{__sed} -i -e '1s,/usr/bin/env python$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
+%{__sed} -i -e '1s,/usr/bin/env python3$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
 
 %build
 export CFLAGS="%{rpmcflags}"
