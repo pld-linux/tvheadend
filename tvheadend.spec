@@ -2,8 +2,8 @@
 # Conditional build:
 %bcond_without	systemd		# without systemd support
 
-%define		gitref	5aa50b12fc4bab29855edba8557f0ad8fe26e2d1
-%define		snap	20230306
+%define		gitref	c531383ca6654639dc112db67fd8dc893c1f5272
+%define		snap	20230719
 %define		rel	1
 
 Summary:	TV streaming server
@@ -14,7 +14,7 @@ Release:	0.%{snap}.%{rel}
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	fcd2c9946c48ee9b112f9451b1c2ccdb
+# Source0-md5:	145d05de790f785f8f1d8f2166d4ce41
 Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
