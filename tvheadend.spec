@@ -4,7 +4,7 @@
 
 %define		gitref	c531383ca6654639dc112db67fd8dc893c1f5272
 %define		snap	20230719
-%define		rel	1
+%define		rel	2
 
 Summary:	TV streaming server
 Name:		tvheadend
@@ -19,6 +19,7 @@ Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
 Patch0:		x32.patch
+Patch1:		ffmpeg6.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	dbus-devel
@@ -55,6 +56,7 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %ifarch x32
 %patch0 -p1
 %endif
+%patch1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
 
@@ -122,7 +124,10 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc docs
-%attr(755,root,root) %{_bindir}/%{name}
+%attr(755,root,root) %{_bindir}/tvheadend
+%attr(755,root,root) %{_bindir}/tvhmeta
+%attr(755,root,root) %{_bindir}/tv_meta_tmdb.py
+%attr(755,root,root) %{_bindir}/tv_meta_tvdb.py
 %attr(754,root,root) /etc/rc.d/init.d/tvheadend
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %{_mandir}/man1/%{name}.1*

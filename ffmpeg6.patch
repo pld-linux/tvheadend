@@ -1,0 +1,11 @@
+--- tvheadend-c531383ca6654639dc112db67fd8dc893c1f5272/src/transcoding/transcode/hwaccels/vaapi.c~	2023-07-19 21:53:15.000000000 +0200
++++ tvheadend-c531383ca6654639dc112db67fd8dc893c1f5272/src/transcoding/transcode/hwaccels/vaapi.c	2023-10-21 22:34:37.128586237 +0200
+@@ -594,7 +594,7 @@
+     }
+ 
+     avctx->get_buffer2 = vaapi_get_buffer2;
+-    avctx->thread_safe_callbacks = 0;
++    //avctx->thread_safe_callbacks = 0;
+ 
+     return 0;
+ }
