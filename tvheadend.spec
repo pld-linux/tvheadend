@@ -89,7 +89,7 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/.hts/%{name} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
-        V=1
+	V=1
 
 %{?with_systemd:cp -p %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service}
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
