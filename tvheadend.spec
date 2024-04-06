@@ -2,9 +2,9 @@
 # Conditional build:
 %bcond_without	systemd		# without systemd support
 
-%define		gitref	c531383ca6654639dc112db67fd8dc893c1f5272
-%define		snap	20230719
-%define		rel	2
+%define		gitref	ab6ea89b11b1f1a8dcbfd7cfc29d65b3013f2702
+%define		snap	20240324
+%define		rel	1
 
 Summary:	TV streaming server
 Name:		tvheadend
@@ -14,12 +14,11 @@ Release:	0.%{snap}.%{rel}
 License:	GPL v3
 Group:		Applications/Multimedia
 Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	145d05de790f785f8f1d8f2166d4ce41
+# Source0-md5:	551697c45195b4cee9178ef0e6ebb8e2
 Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
 Patch0:		x32.patch
-Patch1:		ffmpeg6.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	dbus-devel
@@ -56,7 +55,6 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 %ifarch x32
 %patch0 -p1
 %endif
-%patch1 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
 
