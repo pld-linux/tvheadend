@@ -4,7 +4,7 @@
 
 %define		gitref	8837853a69aa822b0203eb3909c5912dc831312e
 %define		snap	20261019
-%define		rel	1
+%define		rel	2
 
 Summary:	TV streaming server
 Name:		tvheadend
@@ -18,6 +18,7 @@ Source0:	https://github.com/tvheadend/tvheadend/archive/%{gitref}/%{name}-%{snap
 Source1:	%{name}.service
 Source2:	%{name}.sysconfig
 Source3:	%{name}.init
+Patch0:		ffmpeg9.patch
 URL:		https://tvheadend.org/projects/tvheadend
 BuildRequires:	avahi-devel
 BuildRequires:	dbus-devel
@@ -51,6 +52,7 @@ DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources.
 
 %prep
 %setup -q -n %{name}-%{gitref}
+%patch -P0 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python3$,%{__python3},' lib/py/tvh/tv_meta_{tm,tv}db.py support/tvhmeta
 
